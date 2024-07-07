@@ -44,10 +44,34 @@ app.get('/notes', (req, res) => {
 
 
 
+app.delete('/notes/:note_id', (req, res) => {
+  const noteId = req.params.note_id;
+  pool.query('DELETE FROM notes WHERE note_id = ?', [noteId], (error, result) => {
+    if (error) {
+      console.error('Error deleting note:', error);
+      res.status(500).json({ error: 'Error deleting note' });
+    } else {
+      console.log('Note deleted successfully');
+      res.status(200).json({ message: 'Note deleted successfully' });
+    }
+  });
+});
 
 
 
-
+app.post('/notes', (req, res) => {
+  const { note_title } = req.body;
+  console.log(note_title)
+  pool.query('INSERT INTO notes (note_title) VALUES (?)', [note_title ], (error, result) => {
+      if (error) {
+          console.error('Error adding note:', error);
+          res.status(500).send('Error adding note');
+      } else {
+          const noteId = result.insertId;
+          res.send(result); // Assuming redirect to home after note creation
+      }
+  });
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

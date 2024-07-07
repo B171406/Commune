@@ -1,13 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Home from './pages/Home';
-import Register from './pages/Register';
-import { NotesContainer } from './pages/NotesContainer';
+import Home from './containers/public/SignIn'
+import Register from './containers/public/SignUp';
+import { NotesContainer } from './containers/private/Dashboard';
 import Navbar from './components/navbar/Navbar';
-import { Nomatch } from './components/no_match/Nomatch';
+import { Nomatch } from './containers/public/no-match/Nomatch';
+import store from './redux/store';
+import { Provider } from 'react-redux';
 
 const App = () => {
   return (
+    <Provider store={store}>
     <Router>
       <div>
         <Navbar />
@@ -18,11 +21,12 @@ const App = () => {
             <Route path=":noteId" element={<NotesContainer />} />
             <Route path="*" element={<Navigate to="/404" />} />
           </Route>
-          <Route path="/404" element={<Nomatch />} />s
+          <Route path="/404" element={<Nomatch />} />
           <Route path='*' element={<Navigate to="/404" />} />
         </Routes>
       </div>
     </Router>
+    </Provider>
   );
 };
 

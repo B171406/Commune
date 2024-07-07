@@ -8,7 +8,7 @@ export default function Search({ filterNotes }) {
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchValue(value);
-    filterNotes(value); // Pass the search value to the filter function passed as prop
+    filterNotes(value); 
   };
 
   return (

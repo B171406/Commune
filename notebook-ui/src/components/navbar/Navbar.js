@@ -3,7 +3,7 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import img from '/home/quanteon/notebook1/frontend/src/assets/notes.png'
+import img from '/home/quanteon/notebook1/notebook-ui/src/assets/notes.png'
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
