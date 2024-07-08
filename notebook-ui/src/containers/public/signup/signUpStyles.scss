@@ -1,0 +1,26 @@
+@import '/home/quanteon/notebook1/notebook-ui/src/styles/global.scss';
+
+.paper {
+  width: $paper-width;
+  min-height: $paper-min-height;
+  margin-top: $paper-margin-top;
+  padding: $paper-padding;
+
+  .image {
+    width: $image-width;
+    height: $image-height;
+    object-fit: $image-object-fit;
+  }
+
+  .container {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form {
+    margin-top: 24px;
+  }
+
+}

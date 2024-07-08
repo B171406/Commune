@@ -1,0 +1,23 @@
+{
+    "signIn": {
+      "title": "Sign In",
+      "emailLabel": "Email Address",
+      "passwordLabel": "Password",
+      "signInButton": "Sign In",
+      "rememberMeLabel": "Remember Me",
+      "forgotPasswordLink": "Forgot Password?",
+      "dontHaveAccount": "Don't have an account?",
+      "signUpLink": "Sign Up"
+    },
+    "signUp":{
+      "firstname":"First Name",
+      "lastname":"Last Name",
+      "termsConditions":"Accept terms and conditions..!",
+      "alredyHaveAccount": "Already have an account?"
+
+    },
+    "navbar":{
+      "logout":"Logout"
+    }
+  }
+  

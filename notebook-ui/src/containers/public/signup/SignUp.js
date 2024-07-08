@@ -1,6 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import { useTranslation } from 'react-i18next';
 
 import img from '/home/quanteon/notebook1/notebook-ui/src/assets/note.jpg'
 
@@ -11,14 +12,18 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {ButtonForAuthentication} from '/home/quanteon/notebook1/notebook-ui/src/components/primary-btn/PrimaryButton'
-import { CheckBox } from '../../components/form-fields/checkboxes/CheckBox.js';
-import { TextFeildForMail } from '../../components/form-fields/mail-text-field/TextFeildForMail.js';
-import { TextFeildForPassword } from '../../components/form-fields/password-text-feild/TextFeildForPassword.js';
+import { CheckBox } from '../../../components/form-fields/checkboxes/CheckBox.js';
+import { TextFeildForMail } from '../../../components/form-fields/mail-text-field/TextFeildForMail.js';
+import { TextFeildForPassword } from '../../../components/form-fields/password-text-feild/TextFeildForPassword.js';
 import { LockOutlined } from '/home/quanteon/notebook1/notebook-ui/src/components/lock_outlined_Icon/LockOutlined.js';
-import { AuthHead } from '../../components/auth-heading-typography/AuthHeadingTypography.js';
+import { AuthHead } from '../../../components/auth-heading-typography/AuthHeadingTypography.js';
+
+// Import CSS file
+import './signUpStyles.scss';
 
 export default function Register() {
-    const paperstyle = { width: 1200 };
+    const { t, i18n } = useTranslation("global");
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -27,13 +32,15 @@ export default function Register() {
           password: data.get('password'),
         });
       };
+
     return (
         <>
+            {/* Main content */}
             <Grid container justifyContent="center">
-                <Paper elevation={10} style={{ ...paperstyle, minHeight: '70vh', marginTop: "10vh" }}>
+                <Paper elevation={10} className="paper">
                     <Grid container justifyContent="center" style={{ height: "100%" }}>
                         <Grid item xs={12} sm={6}>
-                            <img src={img} alt="Note image" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <img src={img} alt="Note image" className="image" />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Container component="main" maxWidth="xs">
@@ -44,10 +51,11 @@ export default function Register() {
                                         flexDirection: 'column',
                                         alignItems: 'center',
                                     }}
+                                    className="container"
                                 >
                                     <LockOutlined />
-                                    <AuthHead name=" Sign up" />
-                                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                                    <AuthHead name={t("signIn.signUpLink")} />
+                                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }} className="form">
                                         <Grid container spacing={2}>
                                             <Grid item xs={12} sm={6}>
                                                 <TextField
@@ -56,7 +64,7 @@ export default function Register() {
                                                     required
                                                     fullWidth
                                                     id="firstName"
-                                                    label="First Name"
+                                                    label={t("signUp.firstname")}
                                                     autoFocus
                                                 />
                                             </Grid>
@@ -65,7 +73,7 @@ export default function Register() {
                                                     required
                                                     fullWidth
                                                     id="lastName"
-                                                    label="Last Name"
+                                                    label={t("signUp.lastname")}
                                                     name="lastName"
                                                     autoComplete="family-name"
                                                 />
@@ -77,15 +85,15 @@ export default function Register() {
                                                 <TextFeildForPassword />
                                             </Grid>
                                             <Grid item xs={12}>
-                                                <CheckBox name="Accept terms and conditions..!" />
+                                                <CheckBox name={t("signUp.termsConditions")} />
                                             </Grid>
                                         </Grid>
-                                        <ButtonForAuthentication name="Sign Up" />
+                                        <ButtonForAuthentication name={t("signIn.signUpLink")} />
                                         <Grid container justifyContent="center">
                                             <Grid item style={{ display: "flex" }}>
-                                                <Typography>Already have an account?</Typography> &nbsp; &nbsp;
-                                                <Link href="/" variant="body2" style={{ textDecoration: "none" }}>
-                                                    Sign in
+                                                <Typography>{t("signUp.alredyHaveAccount")}</Typography> &nbsp; &nbsp;
+                                                <Link href="/" variant="body2"  style={{textDecoration : "none"}}>
+                                                    {t("signIn.title")}
                                                 </Link>
                                             </Grid>
                                         </Grid>

@@ -1,0 +1,21 @@
+{
+  "signIn": {
+    "title": "Connexion",
+    "emailLabel": "Adresse Email",
+    "passwordLabel": "Mot de passe",
+    "signInButton": "Se connecter",
+    "rememberMeLabel": "Se souvenir de moi",
+    "forgotPasswordLink": "Mot de passe oublié ?", 
+    "dontHaveAccount": "Vous n'avez pas de compte ?",
+    "signUpLink": "S'inscrire"
+  },
+  "signUp": {
+    "firstname": "Prénom",
+    "lastname": "Nom de famille",
+    "termsConditions": "Accepter les termes et conditions..!",
+    "alredyHaveAccount": "Vous avez déjà un compte ?"
+  },
+  "navbar":{
+    "logout":"Déconnexion"
+  }
+}

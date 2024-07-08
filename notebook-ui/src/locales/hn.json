@@ -1,0 +1,22 @@
+{
+    "signIn": {
+      "title": "लॉग इन करें",
+      "emailLabel": "ईमेल पता",
+      "passwordLabel": "पासवर्ड",
+      "signInButton": "लॉग इन करें",
+      "rememberMeLabel": "मुझे याद रखें",
+      "forgotPasswordLink": "पासवर्ड भूल गए?",
+      "dontHaveAccount": "क्या आपके पास खाता नहीं है?",
+      "signUpLink": "साइन अप करें"
+    },
+    "signUp": {
+      "firstname": "पहला नाम",
+      "lastname": "उपनाम",
+      "termsConditions": "नियम और शर्तें स्वीकार करें",
+      "alredyHaveAccount": "क्या आपके पास पहले से ही खाता है?"
+    },
+    "navbar": {
+      "logout": "लॉग आउट"
+    }
+  }
+  

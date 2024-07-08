@@ -1,0 +1,47 @@
+body {
+  background-color: #f2f2f2 !important;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100%;
+  @media only screen and (max-width: 769px) {
+    height: 100dvh;
+  }
+  font-family: 'MavenPro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100%;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+div,
+h1,
+h2,
+h3,
+a,
+p,
+h4,
+h5,
+h6,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

@@ -1,17 +1,41 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import ReactDOM from 'react-dom';
+import '/home/quanteon/notebook1/notebook-ui/src/styles/style.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+import store from './store/store'; // Adjust path based on your project structure
+import { I18nextProvider } from 'react-i18next'; // Import I18nextProvider
+import i18next from 'i18next';
+import french from '../src/locales/fr.json';
+import english from '../src/locales/en.json';
+import hindhi from '../src/locales/hn.json'
+
+i18next.init({
+  interpolation: { escapeValue: false },
+  lng: "en",
+  resources: {
+    en: {
+      global: english,
+    },
+    fr: {
+      global: french,
+    },
+    hn:{
+      global: hindhi,
+    }
+  }
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <I18nextProvider i18n={i18next}>
+    <Provider store={store}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </Provider>
+  </I18nextProvider>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+reportWebVitals(console.log); // or remove if not needed

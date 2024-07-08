@@ -1,3 +1,5 @@
+// Notes.js
+
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -5,16 +7,16 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { Paper } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
-import Search from '../../components/form-fields/searchfields/SearchField';
-import FormDialog from '../../components/form-fields/form_dialog/FormDialog';
-import axios from 'axios';
-import { setNoteTitles, deleteNoteTitle, addNoteTitle } from '../../redux/notesSlice';
+import Search from '../components/form-fields/searchfields/SearchField';
+import FormDialog from '../components/form-fields/form_dialog/FormDialog';
+import { getNotes, deleteNote, addNote } from '../services/noteService'; // Adjust the import path as per your project structure
+import { setNoteTitles, deleteNoteTitle } from '/home/quanteon/notebook1/notebook-ui/src/store/actions/ notesActions.js';
 
 const Notes = () => {
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false); // State to control FormDialog visibility
   const [filteredNotes, setFilteredNotes] = useState([]);
   
-  const noteTitles = useSelector(state => state.notes.noteTitles);
+  const noteTitles = useSelector(state => state.noteTitles);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,8 +29,7 @@ const Notes = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/notes');
-      const data = response.data;
+      const data = await getNotes();
       dispatch(setNoteTitles(data)); // Dispatch action to set note titles in Redux state
     } catch (error) {
       console.error('Error fetching notes:', error);
@@ -36,16 +37,10 @@ const Notes = () => {
     }
   };
 
-  const deleteNote = async (noteId) => {
+  const handleDeleteNote = async (noteId) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/notes/${noteId}`);
-      if (response.status === 200) {
-        dispatch(deleteNoteTitle(noteId)); // Dispatch action to delete note from Redux state
-        fetchData()
-        console.log('Note deleted successfully from backend');
-      } else {
-        console.error('Error deleting note:', response.data);
-      }
+      await deleteNote(noteId, dispatch); // Delete note through service function
+      fetchData(); // Fetch updated list of notes
     } catch (error) {
       console.error('Error deleting note:', error);
     }
@@ -61,23 +56,13 @@ const Notes = () => {
 
   const handleAddNote = async (noteName) => {
     try {
-      // Send POST request to add note to backend API
-      const response = await axios.post('http://localhost:5000/notes', { note_title: noteName }); 
-      // Check if request was successful
-      if (response.status === 200) {
-        console.log('Note added successfully');  
-        // Fetch updated list of notes
-        fetchData(); 
-        // Close the form dialog
-        handleCloseDialog();
-      } else {
-        console.error('Error adding note:', response.data);
-      }
+      await addNote(noteName, dispatch); // Add note through service function
+      fetchData(); // Fetch updated list of notes
+      handleCloseDialog(); // Close the form dialog
     } catch (error) {
       console.error('Error adding note:', error);
     }
   };
-  
 
   const filterNotes = (searchTerm) => {
     const filtered = noteTitles.filter(note => note.note_title.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -99,7 +84,7 @@ const Notes = () => {
             <Link to={`${note.note_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
               <h2>{note.note_title}</h2>
             </Link>
-            <ClearIcon onClick={() => deleteNote(note.note_id)} style={{ cursor: 'pointer' }} />
+            <ClearIcon onClick={() => handleDeleteNote(note.note_id)} style={{ cursor: 'pointer' }} />
           </Paper>
         ))}
       </div>
