@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { CssBaseline } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 // Import your custom components and assets
 import { ButtonForAuthentication } from '/home/quanteon/notebook1/notebook-ui/src/components/primary-btn/PrimaryButton';
@@ -19,9 +20,32 @@ import img from '/home/quanteon/notebook1/notebook-ui/src/assets/note.jpg';
 
 // Import CSS file
 import './signinstyles.scss';
+import { signIn } from '../../../services/signInService.js';
 
 export default function Home() {
     const { t, i18n } = useTranslation("global");
+    const navigate=useNavigate()
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const newFormData = {
+            email: data.get('email'),
+            password: data.get('password'),
+        };
+        try {
+           await signIn(newFormData)
+            const accessToken = localStorage.getItem('accessToken');
+            if(accessToken){
+            navigate('/notes');
+            }
+            else{
+                navigate('/');
+            }
+        }
+        catch (error) {
+            console.error('Login error:', error);
+        }
+    };
 
     return (
         <>
@@ -46,16 +70,17 @@ export default function Home() {
                                 >
                                     <LockOutlined />
                                     <AuthHead name={t("signIn.title")} />
-                                    <Box component="form" noValidate sx={{ mt: 1 }} className="form">
+                                    <Box onSubmit={handleSubmit} component="form" noValidate sx={{ mt: 1 }} className="form">
                                         <TextFeildForMail />
                                         <br></br>
                                         <TextFeildForPassword />
+                                        <br></br>
                                         <CheckBox name={t("signIn.rememberMeLabel")} />
                                         <ButtonForAuthentication name={t("signIn.signInButton")} />
                                         <br></br>
                                         <Grid container>
                                             <Grid item xs>
-                                                <Link href="/forgotPassword" variant="body2" style={{ textDecoration: "none" }}>
+                                                <Link href="/forgotPassword" variant="body2" style={{ textDecoration: "none",padding:"12px" }}>
                                                     {t("signIn.forgotPasswordLink")}
                                                 </Link>
                                             </Grid>
@@ -68,10 +93,6 @@ export default function Home() {
                                         </Grid>
                                     </Box>
                                 </Box>
-                                <br></br>
-                                <br></br>
-                                <br></br>
-                                <br></br>
                             </Container>
                         </Grid>
                     </Grid>

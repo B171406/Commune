@@ -68,6 +68,12 @@ const Notes = () => {
     const filtered = noteTitles.filter(note => note.note_title.toLowerCase().includes(searchTerm.toLowerCase()));
     setFilteredNotes(filtered);
   };
+  const [selectedNoteId, setSelectedNoteId] = useState(null);
+
+  const handleClick = (noteId) => {
+      setSelectedNoteId(noteId);
+  };
+
 
   return (
     <>
@@ -79,14 +85,14 @@ const Notes = () => {
       </div>
       <Search filterNotes={filterNotes} />
       <div style={{ maxHeight: "78vh", overflow: "auto" }}>
-        {filteredNotes.map((note, index) => (
-          <Paper key={note.note_id} elevation={3} style={{ padding: '20px', margin: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Link to={`${note.note_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-              <h2>{note.note_title}</h2>
-            </Link>
-            <ClearIcon onClick={() => handleDeleteNote(note.note_id)} style={{ cursor: 'pointer' }} />
-          </Paper>
-        ))}
+      {filteredNotes.map((note, index) => (
+                <Paper key={note.note_id} elevation={selectedNoteId === note.note_id ? 10 : 3} style={{ padding: '20px', margin: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }} onClick={() => handleClick(note.note_id)}>
+                    <Link to={`${note.note_id}/messages`} style={{ textDecoration: 'none', color: 'inherit', flex: '1' }}>
+                        <h2>{note.note_title}</h2>
+                    </Link>
+                    <ClearIcon onClick={() => handleDeleteNote(note.note_id)} style={{ cursor: 'pointer' }} />
+                </Paper>
+            ))}
       </div>
       <FormDialog open={isFormDialogOpen} handleClose={handleCloseDialog} addNote={handleAddNote} />
     </>

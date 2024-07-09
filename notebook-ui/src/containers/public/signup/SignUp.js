@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import img from '/home/quanteon/notebook1/notebook-ui/src/assets/note.jpg'
 
@@ -11,28 +12,60 @@ import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {ButtonForAuthentication} from '/home/quanteon/notebook1/notebook-ui/src/components/primary-btn/PrimaryButton'
+import { ButtonForAuthentication } from '/home/quanteon/notebook1/notebook-ui/src/components/primary-btn/PrimaryButton'
 import { CheckBox } from '../../../components/form-fields/checkboxes/CheckBox.js';
 import { TextFeildForMail } from '../../../components/form-fields/mail-text-field/TextFeildForMail.js';
 import { TextFeildForPassword } from '../../../components/form-fields/password-text-feild/TextFeildForPassword.js';
 import { LockOutlined } from '/home/quanteon/notebook1/notebook-ui/src/components/lock_outlined_Icon/LockOutlined.js';
 import { AuthHead } from '../../../components/auth-heading-typography/AuthHeadingTypography.js';
+import { signUp } from '../../../services/signUpServices.js';
 
 // Import CSS file
 import './signUpStyles.scss';
 
 export default function Register() {
+    const navigate=useNavigate()
     const { t, i18n } = useTranslation("global");
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+    });
+    const [error, setError] = useState(null);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-          email: data.get('email'),
-          password: data.get('password'),
-        });
-      };
+        const newFormData = {
+            firstName: data.get('firstName'),
+            lastName: data.get('lastName'),
+            email: data.get('email'),
+            password: data.get('password'),
+        };
 
+        try {
+            // Simulating a successful registration (replace with actual API call)
+            await signUp(newFormData);
+            setFormData({
+                firstName: '',
+                lastName: '',
+                email: '',
+                password: '',
+            });
+            const accessToken = localStorage.getItem('accessToken');
+            if(accessToken){
+                navigate('/notes');
+            }
+            else{
+                    navigate('/register');
+                }
+            setError(null); // Clear any previous errors
+        } catch (error) {
+            console.error('Error during sign-up:', error);
+            setError('Registration failed. Please try again.'); 
+        }
+    };
     return (
         <>
             {/* Main content */}
@@ -66,6 +99,8 @@ export default function Register() {
                                                     id="firstName"
                                                     label={t("signUp.firstname")}
                                                     autoFocus
+                                                    value={formData.firstName}
+                                                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                                                 />
                                             </Grid>
                                             <Grid item xs={12} sm={6}>
@@ -76,6 +111,8 @@ export default function Register() {
                                                     label={t("signUp.lastname")}
                                                     name="lastName"
                                                     autoComplete="family-name"
+                                                    value={formData.lastName}
+                                                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                                                 />
                                             </Grid>
                                             <Grid item xs={12}>
@@ -88,21 +125,18 @@ export default function Register() {
                                                 <CheckBox name={t("signUp.termsConditions")} />
                                             </Grid>
                                         </Grid>
-                                        <ButtonForAuthentication name={t("signIn.signUpLink")} />
+                                            <ButtonForAuthentication name={t("signIn.signUpLink")} />
+                                        {error && <Typography variant="body2" color="error" style={{ marginTop: '10px' }}>{error}</Typography>}
                                         <Grid container justifyContent="center">
                                             <Grid item style={{ display: "flex" }}>
                                                 <Typography>{t("signUp.alredyHaveAccount")}</Typography> &nbsp; &nbsp;
-                                                <Link href="/" variant="body2"  style={{textDecoration : "none"}}>
+                                                <Link href="/" variant="body2" style={{ textDecoration: "none" }}>
                                                     {t("signIn.title")}
                                                 </Link>
                                             </Grid>
                                         </Grid>
                                     </Box>
                                 </Box>
-                                <br></br>
-                                <br></br>
-                                <br></br>
-                                <br></br>
                             </Container>
                         </Grid>
                     </Grid>

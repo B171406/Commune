@@ -12,7 +12,10 @@ const Navbar = () => {
     const handleLanguageChange = (lang) => {
         i18n.changeLanguage(lang); // Change language using i18n instance
     };
-
+    const handleLogout = () =>{
+        localStorage.setItem('accessToken', '');
+        navigate('/')
+    }
     const navigate = useNavigate();
 
     return (
@@ -36,7 +39,7 @@ const Navbar = () => {
                     <option value="fr">French</option>
                     <option value="hn">Hindhi</option>
                 </select>
-                <Button color="inherit" onClick={() => navigate('/')}>{t('navbar.logout')}</Button> {/* Translate 'Logout' using t function */}
+                <Button color="inherit" onClick={() => handleLogout()}>{t('navbar.logout')}</Button> {/* Translate 'Logout' using t function */}
             </Toolbar>
         </AppBar>
     );

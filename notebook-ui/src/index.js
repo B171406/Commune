@@ -10,6 +10,7 @@ import i18next from 'i18next';
 import french from '../src/locales/fr.json';
 import english from '../src/locales/en.json';
 import hindhi from '../src/locales/hn.json'
+import { AuthProvider } from './utils/auth';
 
 i18next.init({
   interpolation: { escapeValue: false },
@@ -38,4 +39,4 @@ root.render(
   </I18nextProvider>
 );
 
-reportWebVitals(console.log); // or remove if not needed
+

@@ -1,6 +1,8 @@
 const express = require('express');
 const { createPool } = require('mysql');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const pool = createPool({
   host: 'localhost',
   user: 'root',
@@ -8,6 +10,7 @@ const pool = createPool({
   database: 'notebook',
   connectionLimit: 10
 });
+JWT_SECRET = '57db1a24a061ed03043ca809c61f788261d12c24bb42e27abb5f5643a7cf4f175da8e7893732aebf1fb637a3b5c35459abf0162391d2f12ced63d754be315e2c';
 if(!pool){
   console.log("err")
 }
@@ -73,11 +76,92 @@ app.post('/notes', (req, res) => {
   });
 });
 
+
+
+app.post('/register', async (req, res) => {
+    const { firstName, lastName, email, password } = req.body;
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+    
+        // Insert user into the database
+        pool.query('INSERT INTO users (name, mail, password) VALUES (?, ?, ?)', [`${firstName} ${lastName}`, email, hashedPassword], (error, results) => {
+          if (error) {
+              console.error(error);
+              return res.status(500).json({ error: 'Registration failed. Please try again later.' });
+          } else {
+              // Create JWT token for user authentication
+              
+              const accessToken = jwt.sign({ usermail: email }, JWT_SECRET );
+              res.json({ accessToken: accessToken });
+          }
+      });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+app.post('/login', async (req, res) => {
+  const {email, password } = req.body;
+  try {
+      // Query user from database by username
+      pool.query('SELECT * FROM users WHERE mail = ?', [email], async (error, results) => {
+          if (error) {
+              console.log(error);
+              return res.status(500).json({ error: 'Internal Server Error' });
+          } else if (results.length > 0) {
+              const user = results[0];
+              const passwordMatch = await bcrypt.compare(password, user.password);
+              if (passwordMatch) {
+                  // Create JWT token for user authentication
+                  const accessToken = jwt.sign({ usermail: email }, JWT_SECRET );
+                  res.json({ accessToken: accessToken });
+              } else {
+                  // Incorrect password
+                  res.status(401).json({ error: 'Authentication failed. Check your credentials.' });
+              }
+          } else {
+              // User not found
+              res.status(404).json({ error: 'User not found' });
+          }
+      });
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+app.get('/messages/note_id/:note_id', (req, res) => {
+  const noteId = Number(req.params.note_id);
+  console.log(noteId)
+  const query = 'SELECT *, CONVERT_TZ(sent_at, \'+00:00\', \'+05:30\') AS ist_sent_at FROM messages WHERE note_id = ?';
+
+  pool.query(query, [noteId], (err, results) => {
+      if (err) {
+          console.error('Error fetching messages:', err);
+          return res.status(500).json({ error: 'Error fetching messages' });
+      }
+
+      // Map over results to replace sent_at with ist_sent_at
+      const messages = results.map(message => {
+          return {
+              ...message,
+              sent_at: message.ist_sent_at // Replace sent_at with IST timestamp
+          };
+      });
+
+      res.json(messages);
+  });
+});
+
+
+
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
 // models/db.js
-
-
-
-
