@@ -15,55 +15,90 @@ import Container from '@mui/material/Container';
 import { ButtonForAuthentication } from '/home/quanteon/notebook1/notebook-ui/src/components/primary-btn/PrimaryButton'
 import { CheckBox } from '../../../components/form-fields/checkboxes/CheckBox.js';
 import { TextFeildForMail } from '../../../components/form-fields/mail-text-field/TextFeildForMail.js';
-import { TextFeildForPassword } from '../../../components/form-fields/password-text-feild/TextFeildForPassword.js';
-import { LockOutlined } from '/home/quanteon/notebook1/notebook-ui/src/components/lock_outlined_Icon/LockOutlined.js';
+import { TextFeildForPassword, TextFeildForConfirmPassword } from '../../../components/form-fields/password-text-feild/TextFeildForPassword.js';
+import { LockOutlined } from '/home/quanteon/notebook1/notebook-ui/src/components/lock-outlined-Icon/LockOutlined.js';
 import { AuthHead } from '../../../components/auth-heading-typography/AuthHeadingTypography.js';
-import { signUp } from '../../../services/signUpServices.js';
+import { signUp } from '../../../services/SignUpServices.js';
+import { TextFeildName } from '../../../components/form-fields/namefeild/NameFeild.js';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../../../store/Reducers.js';
+
 
 // Import CSS file
 import './signUpStyles.scss';
 
 export default function Register() {
-    const navigate=useNavigate()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const { t, i18n } = useTranslation("global");
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
         password: '',
+        confirmPassword: '',
     });
     const [error, setError] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        console.log(data)
         const newFormData = {
             firstName: data.get('firstName'),
             lastName: data.get('lastName'),
             email: data.get('email'),
             password: data.get('password'),
+            confirmPassword: data.get('confirmpassword')
         };
 
         try {
-            // Simulating a successful registration (replace with actual API call)
-            await signUp(newFormData);
+            if (newFormData.password !== newFormData.confirmPassword) {
+                setError(t("Password's Do Not Match"));
+                return;
+            }
+            if (newFormData.email === '') {
+                setError(t("Email feild is empty"));
+                return;
+            }
+            if (newFormData.firstName === '') {
+                setError(t("FirstName Feild is empty"));
+                return;
+            }
+            if (newFormData.lastName === '') {
+                setError(t("LastName Feild is empty"));
+                return;
+            }
+            const data = await signUp(newFormData);; // Assuming signIn returns accessToken
+            const accessToken = data.accessToken
+            const user = data.user
+            const payload = {
+                token: accessToken,
+                user: user,
+            };
+            // Convert payload object to JSON string
+            const payloadString = JSON.stringify(payload);
+
+            // Store payloadString in localStorage
+            localStorage.setItem('payload', payloadString);
+            dispatch(login(payload));
             setFormData({
                 firstName: '',
                 lastName: '',
                 email: '',
                 password: '',
             });
-            const accessToken = localStorage.getItem('accessToken');
-            if(accessToken){
+            // const accessToken = localStorage.getItem('accessToken');
+            if (accessToken) {
                 navigate('/notes');
             }
-            else{
-                    navigate('/register');
-                }
+            else {
+                navigate('/register');
+            }
             setError(null); // Clear any previous errors
         } catch (error) {
             console.error('Error during sign-up:', error);
-            setError('Registration failed. Please try again.'); 
+            setError('Registration failed. Please try again.');
         }
     };
     return (
@@ -91,29 +126,10 @@ export default function Register() {
                                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }} className="form">
                                         <Grid container spacing={2}>
                                             <Grid item xs={12} sm={6}>
-                                                <TextField
-                                                    autoComplete="given-name"
-                                                    name="firstName"
-                                                    required
-                                                    fullWidth
-                                                    id="firstName"
-                                                    label={t("signUp.firstname")}
-                                                    autoFocus
-                                                    value={formData.firstName}
-                                                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                                                />
+                                                < TextFeildName name={"firstname"} />
                                             </Grid>
                                             <Grid item xs={12} sm={6}>
-                                                <TextField
-                                                    required
-                                                    fullWidth
-                                                    id="lastName"
-                                                    label={t("signUp.lastname")}
-                                                    name="lastName"
-                                                    autoComplete="family-name"
-                                                    value={formData.lastName}
-                                                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                                                />
+                                                < TextFeildName name={"lastname"} />
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <TextFeildForMail />
@@ -122,11 +138,14 @@ export default function Register() {
                                                 <TextFeildForPassword />
                                             </Grid>
                                             <Grid item xs={12}>
+                                                < TextFeildForConfirmPassword />
+                                            </Grid>
+                                            <Grid item xs={12}>
                                                 <CheckBox name={t("signUp.termsConditions")} />
                                             </Grid>
                                         </Grid>
-                                            <ButtonForAuthentication name={t("signIn.signUpLink")} />
-                                        {error && <Typography variant="body2" color="error" style={{ marginTop: '10px' }}>{error}</Typography>}
+                                        <ButtonForAuthentication name={t("signIn.signUpLink")} />
+                                        {error && <Typography variant="body2" color="error" style={{ margin: '5px 100px' }}>{error}</Typography>}
                                         <Grid container justifyContent="center">
                                             <Grid item style={{ display: "flex" }}>
                                                 <Typography>{t("signUp.alredyHaveAccount")}</Typography> &nbsp; &nbsp;

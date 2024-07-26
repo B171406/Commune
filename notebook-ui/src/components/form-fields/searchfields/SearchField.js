@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function Search({ filterNotes }) {
+export default function Search({ filterNotes,...props }) {
   const [searchValue, setSearchValue] = React.useState('');
 
   const handleSearchChange = (event) => {
@@ -10,12 +10,16 @@ export default function Search({ filterNotes }) {
     setSearchValue(value);
     filterNotes(value); 
   };
-
   return (
     <Box
       component="form"
       sx={{
-        '& .MuiTextField-root': { m: 1, width: '70ch' },
+        '& .MuiTextField-root': { m: 1, width: '30vw',
+          '@media (max-width: 768px)': {
+           width: '810vw'
+          }
+         },
+        
       }}
       noValidate
       autoComplete="off"
@@ -23,7 +27,7 @@ export default function Search({ filterNotes }) {
       <div>
         <TextField
           id="standard-multiline-flexible"
-          label="Search note..!"
+          label={props.lable}
           multiline
           maxRows={4}
           variant="standard"

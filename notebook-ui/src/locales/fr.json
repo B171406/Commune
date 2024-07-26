@@ -7,7 +7,9 @@
     "rememberMeLabel": "Se souvenir de moi",
     "forgotPasswordLink": "Mot de passe oublié ?", 
     "dontHaveAccount": "Vous n'avez pas de compte ?",
-    "signUpLink": "S'inscrire"
+    "signUpLink": "S'inscrire",
+    "confirmPassword": "Confirmer le mot de passe",
+    "error":"Échec de la connexion. Veuillez réessayer plus tard."
   },
   "signUp": {
     "firstname": "Prénom",

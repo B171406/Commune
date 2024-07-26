@@ -7,7 +7,9 @@
       "rememberMeLabel": "Remember Me",
       "forgotPasswordLink": "Forgot Password?",
       "dontHaveAccount": "Don't have an account?",
-      "signUpLink": "Sign Up"
+      "signUpLink": "Sign Up",
+      "confirmPassword":"Confirm Password",
+      "error":"Failed to login. Please try again later."
     },
     "signUp":{
       "firstname":"First Name",

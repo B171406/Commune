@@ -2,17 +2,33 @@ import React from 'react'
 import TextField from '@mui/material/TextField';
 import { useTranslation } from 'react-i18next';
 
-export const TextFeildForPassword = () => {
-    const { t, i18n } = useTranslation("global");
+export const TextFeildForPassword = (props) => {
+    const { t } = useTranslation("global");
+    const { password } = props; // Destructure password from props
     return (
-        <div><TextField
+        <TextField
             required
             fullWidth
             name="password"
-            label={t("signIn.passwordLabel")}
+            label={t(`signIn.passwordLabel`)} // Interpolate password into translation key
             type="password"
             id="password"
             autoComplete="new-password"
-        /></div>
-    )
-}
+        />
+    );
+};
+export const TextFeildForConfirmPassword = (props) => {
+    const { t } = useTranslation("global");
+    const { password } = props; // Destructure password from props
+    return (
+        <TextField
+            required
+            fullWidth
+            name="confirmpassword"
+            label={t(`signIn.confirmPassword`)} // Interpolate password into translation key
+            type="password"
+            id="password"
+            autoComplete="new-password"
+        />
+    );
+};

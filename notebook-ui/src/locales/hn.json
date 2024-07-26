@@ -7,7 +7,9 @@
       "rememberMeLabel": "मुझे याद रखें",
       "forgotPasswordLink": "पासवर्ड भूल गए?",
       "dontHaveAccount": "क्या आपके पास खाता नहीं है?",
-      "signUpLink": "साइन अप करें"
+      "signUpLink": "साइन अप करें",
+       "confirmPassword": "पासवर्ड की पुष्टि करें",
+       "error":"लॉगिन करने में विफल। कृपया बाद में पुन: प्रयास करें।"
     },
     "signUp": {
       "firstname": "पहला नाम",
